@@ -1,0 +1,12 @@
+1. Criar imagem da api: docker build -t api-desafio-1sti --file Dockerfile.api .
+2. Criar imagem mysql: docker build -t mysql-desafio-1sti --file Dockerfile.mysql .
+3. Executar container mysql: docker run --name mysql-container -d -v /var/lib/mysql -p 52000:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=desafio-1sti mysql-desafio-1sti
+4. Executar container api: docker run --name api-container -d -p 3000:3000 api-desafio-1sti
+
+docker create network desafio-1sti-network
+
+docker run --name mysql-container -d --network desafio-1sti-network --network-alias mysql -d -v /var/lib/mysql -p 52000:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=desafio-1sti mysql-desafio-1sti
+
+docker run --name api-container -d --network desafio-1sti-network -d -p 3000:3000 -e MYSQL_HOST=mysqlcontainer -e MYSQL_USER=root -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=desafio-1sti api-desafio-1sti
+
+docker run -dp 3000:3000 -w /app -v "$(pwd):/app" --network desafio-1sti-network -e MYSQL_HOST=mysql -e MYSQL_USER=root -e MYSQL_PASSWORD=password -e MYSQL_DB=todos node:12-alpine sh -c "yarn install && yarn run dev"

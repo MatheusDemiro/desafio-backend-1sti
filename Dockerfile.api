@@ -1,0 +1,22 @@
+FROM node:16.13-alpine
+
+LABEL maintainer="matheus.demiro"
+
+RUN mkdir app
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
+# Copy important files
+COPY .eslintrc.js nest-cli.json tsconfig.json tsconfig.build.json ./
+
+# Copy env
+COPY .env ./
+
+COPY . /app
+
+EXPOSE 3000
+
+CMD [ "npm", "run", "start:dev", "--preserveWatchOutput", ";", "npm", "run", "typeorm", "migrate:run" ]
