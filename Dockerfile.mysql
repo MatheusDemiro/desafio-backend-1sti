@@ -8,6 +8,3 @@ RUN mkdir mysql
 WORKDIR /mysql
 
 EXPOSE 3307
-
-# ADD ./src/scripts/start-db.sh /mysql/docker-entrypoint-initdb.d/
-# RUN /mysql/docker-entrypoint-initdb.d/init_db.sh
