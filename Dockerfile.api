@@ -12,11 +12,8 @@ RUN npm ci
 # Copy important files
 COPY .eslintrc.js nest-cli.json tsconfig.json tsconfig.build.json ./
 
-# Copy env
-COPY .env ./
-
-COPY . /app
+COPY . .
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "start:dev", "--preserveWatchOutput", ";", "npm", "run", "typeorm", "migrate:run" ]
+CMD [ "npm", "run", "start:dev", "--preserveWatchOutput" ]

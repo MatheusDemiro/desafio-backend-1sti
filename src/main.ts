@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 import { resolve } from 'path';
 
 async function bootstrap() {
-    config({ path: resolve(__dirname, `../.env.${process.env.NODE_ENV.trim()}`) });
+    config({ path: resolve(__dirname, `../.env.${process.env.NODE_ENV}`) });
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe());
     await app.listen(3000);

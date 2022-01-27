@@ -3,7 +3,6 @@ import { Response } from 'express';
 import { CreateUserDto } from 'src/domain/dto/user/create-user.dto';
 import { UserResponseModel } from 'src/domain/models/user-response.model';
 import { UserService } from 'src/domain/services/user.service';
-import { Utils } from 'src/domain/shared/utils';
 import { ApiError } from 'src/infrastructure/logic/api-error.logic';
 import { SuccessDataResponse } from 'src/infrastructure/logic/api-response.logic';
 
@@ -27,8 +26,6 @@ export class UserController {
     @Get('/:cpf')
     async getUserByCpf(@Param('cpf') cpf: string, @Res() res: Response): Promise<Response> {
         try {
-            cpf = Utils.removeSpecialCharacters(cpf);
-
             const user: UserResponseModel = await this.userService.getUserByCpf(cpf);
 
             return new SuccessDataResponse<UserResponseModel>(undefined, HttpStatus.OK, user).send(res);

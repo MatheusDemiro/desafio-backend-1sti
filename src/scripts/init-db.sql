@@ -1,0 +1,30 @@
+CREATE TABLE `desafio_1sti`.`migrations` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`timestamp` BIGINT(19) NOT NULL,
+	`name` VARCHAR(255) NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `desafio_1sti`.`addresses` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`zip_code` VARCHAR(8) NOT NULL,
+	`update_at` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+	`street` VARCHAR(200) NOT NULL,
+	`city` VARCHAR(100) NOT NULL,
+	`state` VARCHAR(100) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `IDX_32cd7ff70fa32ba6486b6e077a` (`zip_code`)
+);
+
+
+CREATE TABLE `desafio_1sti`.`users` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`cpf` VARCHAR(11) NOT NULL,
+	`name` VARCHAR(100) NOT NULL,
+	`phone` VARCHAR(15) NOT NULL,
+	`address_id` INT(10) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `IDX_230b925048540454c8b4c481e1` (`cpf`),
+	INDEX `FK_1b05689f6b6456680d538c3d2ea` (`address_id`),
+	CONSTRAINT `FK_1b05689f6b6456680d538c3d2ea` FOREIGN KEY (`address_id`) REFERENCES `desafio_1sti`.`addresses` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+);

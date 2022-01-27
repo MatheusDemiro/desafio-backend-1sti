@@ -2,6 +2,8 @@ FROM mysql:5.7
 
 LABEL maintainer="matheus.demiro"
 
+ADD /src/scripts/init-db.sql /docker-entrypoint-initdb.d/init-db.sql
+
 RUN mkdir mysql
 WORKDIR /mysql
 

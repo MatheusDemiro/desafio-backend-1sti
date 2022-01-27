@@ -10,6 +10,7 @@ import { BadRequestError, ConflictError, NotFoundError } from 'src/infrastructur
 import { Strings } from '../shared/strings';
 import { AddressService } from './address.service';
 import { UserResponseModel } from '../models/user-response.model';
+import { Utils } from '../shared/utils';
 
 @Injectable()
 export class UserService {
@@ -56,7 +57,13 @@ export class UserService {
     }
 
     async getUserByCpf(cpf: string): Promise<UserResponseModel> {
+        cpf = Utils.removeSpecialCharacters(cpf);
+
         const user = await this.userRepository.findOne({ relations: ['address'], where: { cpf: cpf } });
+
+        if (user == null) {
+            throw new NotFoundError(Strings.NOT_FOUND_USER_ERROR);
+        }
 
         return this.mapper.map(user, UserResponseModel, User);
     }
