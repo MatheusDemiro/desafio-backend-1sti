@@ -22,52 +22,84 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Descrição
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Projeto desenvolvido para o desafio backend Pleno da empresa 1STi. Para mais informações a respeito do desafio acesse [link](https://docs.google.com/document/d/1OGZJjt39u8cTwTO59H4_-SLockmTImbzBhpaKKoaouE/edit).
 
-## Installation
+Para o desafio foi solicitado cachear a rota de busca por CEP. O armazenamento de cache poderia ser ou via banco de dados em uma tabela à parte ou via banco em memória. Para este projeto foi utilizado uma tabela ("addresses") do banco de dados MySQL para armazenar o cache. Como as informações do CEP é algo que raramente sofrem modificações, foi utilizado um intervalo de 72 horas (variável de ambiente "CACHE_VALIDATION") para a expiração de cache.
 
+## Executar projeto no Visual Studio Code
+###### 1. Instalar dependências
+#
 ```bash
 $ npm install
 ```
 
-## Running the app
-
+###### 2. Executar migrations
+#
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ npm run typeorm migration:run
 ```
 
-## Test
-
+###### 3. Executar aplicação
+#
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ npm run start:local
 ```
 
-## Support
+## Executar projeto no docker
+###### 1. Criar network
+#
+```bash
+$ docker network create desafio-1sti-network
+```
+###### 2. Criar imagem do banco de dados MySQL
+#
+```bash
+$ docker build -t mysql-desafio-1sti --file Dockerfile.mysql .
+```
+###### 3. Criar imagem da API
+#
+```bash
+$ docker build -t api-desafio-1sti --file Dockerfile.api .
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+###### 4. Executar container do banco de dados
+#
+```bash
+$ docker run --name mysql-container -d --network desafio-1sti-network --network-alias mysql -d -v /var/lib/mysql -p 3307:3307 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=desafio_1sti mysql-desafio-1sti
+```
 
-## Stay in touch
+###### 5. Executar container da API
+#
+```bash
+$ docker run --env-file .env.development --name api-container -d --network desafio-1sti-network -d -p 3000:3000 api-desafio-1sti
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Documentação da API
+Link para documentação das rotas da API: https://documenter.getpostman.com/view/5779124/UVeAvp5x.
 
-## License
+## Requisitos
+- Recuperar usuário por CPF - :heavy_check_mark:
+- Listagem de usuários - :heavy_check_mark:
+- Criar novo usuário - :heavy_check_mark:
+- Editar usuário - :heavy_check_mark:
+- Remover usuário - :heavy_check_mark:
+- Recuperar endereço por CEP (que buscará no endpoint https://viacep.com.br) - :heavy_check_mark:
+- Cache da busca por CEP - :heavy_check_mark:
+- Utilizar Typescript NodeJS para desenvolver o projeto, de preferência utilizando o framework NestJS - :heavy_check_mark:
+- Utilizar um banco de dados relacional(MySQL ou PostgreSQL) - :heavy_check_mark:
+- Criar testes unitários simulando cenários com sucesso e com falhas - :x:
+- Criar um Dockerfile para que possa rodar em algum container (ex: kubernetes) - :heavy_check_mark:
+- Criar um README com as instruções para rodar o projeto - :heavy_check_mark:
 
-Nest is [MIT licensed](LICENSE).
+## Requisitos bônus
+- Aplicar algum design pattern no código - :heavy_check_mark:
+- Colocar validação de token JWT - :x:
+
+
+## Contato
+
+- Author - Matheus Demiro
+- E-mail - mpdemiro@hotmail.com
+- Linkedin - [matheus-demiro](https://www.linkedin.com/in/matheus-demiro-887348165/)
